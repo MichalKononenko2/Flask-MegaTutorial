@@ -10,7 +10,8 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         python-env = pkgs.python3.withPackages(p: [ p.flask p.flask-wtf ]);
-        flaskApp = "microblog.py"; 
+        flaskApp = "microblog.py";
+        topLevelFiles = [ flaskApp "config.py" ];
       in {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "flask-mega-tutorial";
@@ -20,7 +21,7 @@
           installPhase = ''
             mkdir -p $out/bin
             cp -R app $out/app
-            cp ${flaskApp} $out/${flaskApp}
+            ${builtins.concatStringsSep "\n" (map (f: "cp ${f} $out/${f}") topLevelFiles)}
             cat > $out/bin/run-app << EOF
             #!${pkgs.stdenv.shell}
             export FLASK_APP=$out/${flaskApp}
