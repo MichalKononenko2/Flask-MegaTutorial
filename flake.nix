@@ -32,6 +32,9 @@
         devShells.default = pkgs.mkShell {
           packages = [ python-env ];
           shellHook = ''
+            mkdir -p $out/bin
+            cp -R app $out/app
+            cp ${flaskApp} $out/${flaskApp}
             export FLASK_APP=$out/${flaskApp}
           '';
         };
