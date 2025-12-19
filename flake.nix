@@ -9,7 +9,7 @@
       system: 
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        python-env = pkgs.python3.withPackages(p: [p.flask]);
+        python-env = pkgs.python3.withPackages(p: [ p.flask p.flask-wtf ]);
         flaskApp = "microblog.py"; 
       in {
         packages.default = pkgs.stdenv.mkDerivation {
