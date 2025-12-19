@@ -24,19 +24,13 @@
             cat > $out/bin/run-app << EOF
             #!${pkgs.stdenv.shell}
             export FLASK_APP=$out/${flaskApp}
-            ${python-env}/bin/python $out/app.py
+            ${python-env}/bin/python $out/${flaskApp}
             EOF
             chmod +x $out/bin/run-app
           '';
         };
         devShells.default = pkgs.mkShell {
           packages = [ python-env ];
-          shellHook = ''
-            mkdir -p $out/bin
-            cp -R app $out/app
-            cp ${flaskApp} $out/${flaskApp}
-            export FLASK_APP=$out/${flaskApp}
-          '';
         };
       }
     );
