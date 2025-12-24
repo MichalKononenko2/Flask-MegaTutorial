@@ -9,7 +9,12 @@
       system: 
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        python-env = pkgs.python3.withPackages(p: [ p.flask p.flask-wtf ]);
+        python-env = pkgs.python3.withPackages(p: [ 
+          p.flask 
+          p.flask-wtf 
+          p.flask-sqlalchemy
+          p.flask-migrate
+        ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
       in {
@@ -36,3 +41,4 @@
       }
     );
 }
+
