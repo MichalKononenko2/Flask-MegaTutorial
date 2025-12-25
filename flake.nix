@@ -17,7 +17,7 @@
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
-        databaseUrl = "sqlite:///var/flask_mega_tutorial/app.db";
+        databaseUrl = "sqlite:///:memory:";
       in rec {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "flask-mega-tutorial";
