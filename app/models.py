@@ -20,7 +20,7 @@ class User(UserMixin, db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password: str) -> bool:
-        return checkk_password_hash(self.password_hash, password)
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self) -> str:
         return '{0}(id={1},username={2})'.format(
