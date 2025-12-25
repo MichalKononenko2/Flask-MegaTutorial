@@ -8,6 +8,21 @@ from app.forms import LoginForm
 from app.models import User
 from urllib.parse import urlsplit
 
+posts = [
+    {
+        "author": "Marshall McLuhan",
+        "body": "The medium is the message"
+    },
+    {
+        "author": "Linus Torvalds",
+        "body": "NVIDIA, fuck you!"
+    },
+    {
+        "author": "Winston Smith",
+        "body": "Down with Big Brother"
+    }
+]
+
 @app.route('/')
 @app.route('/index')
 @login_required
