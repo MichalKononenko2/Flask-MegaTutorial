@@ -2,4 +2,5 @@ outputs
 .*.swp
 result
 __pycache__
+instance
 
