@@ -17,7 +17,7 @@
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
-        databaseUrl = "/var/flask_mega_tutorial/app.db";
+        databaseUrl = "sqlite:///var/flask_mega_tutorial/app.db";
       in rec {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "flask-mega-tutorial";
@@ -41,7 +41,7 @@
           packages = [ python-env packages.default ];
           shellHook=''
             export DATABASE_URL=${databaseUrl}
-            export FLASK_APP=${packages.default}/${flaskApp}
+            export FLASK_APP=./${flaskApp}
           '';
         };
       }
