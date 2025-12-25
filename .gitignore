@@ -1,4 +1,5 @@
 outputs
 .*.swp
 result
+__pycache__
 

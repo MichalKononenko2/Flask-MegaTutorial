@@ -17,6 +17,7 @@
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
+        databaseUrl = "/var/flask_mega_tutorial/app.db";
       in {
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "flask-mega-tutorial";
@@ -30,6 +31,7 @@
             cat > $out/bin/run-app << EOF
             #!${pkgs.stdenv.shell}
             export FLASK_APP=$out/${flaskApp}
+            export DATABASE_URL=${databaseUrl}
             ${python-env}/bin/python $out/${flaskApp}
             EOF
             chmod +x $out/bin/run-app
@@ -37,6 +39,9 @@
         };
         devShells.default = pkgs.mkShell {
           packages = [ python-env ];
+          shellHook=''
+            export DATABASE_URL=${databaseUrl};
+          '';
         };
       }
     );
