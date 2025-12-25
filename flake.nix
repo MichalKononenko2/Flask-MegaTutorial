@@ -14,6 +14,7 @@
           p.flask-wtf 
           p.flask-sqlalchemy
           p.flask-migrate
+          p.flask-login
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
