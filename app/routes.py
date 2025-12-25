@@ -20,7 +20,7 @@ posts = [
     {
         "author": {"username": "Winston Smith"},
         "body": "Down with Big Brother"
-    }
+    },
     {
         "author": {"username": "<b>Cheeky Man"},
         "body": "Defend against <it>XSS</it>"
