@@ -28,8 +28,6 @@
           installPhase = ''
             mkdir -p $out/bin
             cp -R app $out/app
-            rm -r ./__pycache__
-            rm -r ./**/__pycache__
             ${builtins.concatStringsSep "\n" (map (f: "cp ${f} $out/${f}") topLevelFiles)}
             cat > $out/bin/run-app << EOF
             #!${pkgs.stdenv.shell}
