@@ -10,16 +10,20 @@ from urllib.parse import urlsplit
 
 posts = [
     {
-        "author": "Marshall McLuhan",
+        "author": {"username": "Marshall McLuhan"},
         "body": "The medium is the message"
     },
     {
-        "author": "Linus Torvalds",
+        "author": {"username": "Linus Torvalds"},
         "body": "NVIDIA, fuck you!"
     },
     {
-        "author": "Winston Smith",
+        "author": {"username": "Winston Smith"},
         "body": "Down with Big Brother"
+    }
+    {
+        "author": {"username": "<b>Cheeky Man"},
+        "body": "Defend against <it>XSS</it>"
     }
 ]
 
