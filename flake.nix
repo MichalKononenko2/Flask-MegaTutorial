@@ -15,6 +15,7 @@
           p.flask-sqlalchemy
           p.flask-migrate
           p.flask-login
+          p.email-validator
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
