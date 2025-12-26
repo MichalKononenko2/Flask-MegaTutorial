@@ -8,25 +8,6 @@ from app.forms import LoginForm, RegistrationForm
 from app.models import User
 from urllib.parse import urlsplit
 
-posts = [
-    {
-        "author": {"username": "Marshall McLuhan"},
-        "body": "The medium is the message"
-    },
-    {
-        "author": {"username": "Linus Torvalds"},
-        "body": "NVIDIA, fuck you!"
-    },
-    {
-        "author": {"username": "Winston Smith"},
-        "body": "Down with Big Brother"
-    },
-    {
-        "author": {"username": "<b>Cheeky Man"},
-        "body": "Defend against <it>XSS</it>"
-    }
-]
-
 @app.route('/')
 @app.route('/index')
 @login_required
@@ -78,4 +59,28 @@ def register():
         flash('Welcome, %s!' % user.username)
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/user/<username>')
+@login_required
+def user(username: str):
+    user = db.first_or_404(sa.select(User).where(User.username == username))
+    posts = [
+        {
+            "author": {"username": "Marshall McLuhan"},
+            "body": "The medium is the message"
+        },
+        {
+            "author": {"username": "Linus Torvalds"},
+            "body": "NVIDIA, fuck you!"
+        },
+        {
+            "author": {"username": "Winston Smith"},
+            "body": "Down with Big Brother"
+        },
+        {
+            "author": {"username": "<b>Cheeky Man"},
+            "body": "Defend against <it>XSS</it>"
+        }
+    ]
+    return render_template('user.html', user=user, posts=posts)
 
