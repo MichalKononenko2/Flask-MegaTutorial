@@ -5,6 +5,7 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db, login
 from flask_login import UserMixin
+from hashlib import md5
 
 class User(UserMixin, db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.String(64), primary_key=True)
@@ -19,6 +20,10 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
+
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
     def __repr__(self) -> str:
         return '{0}(id={1},username={2})'.format(
