@@ -44,6 +44,7 @@
           shellHook=''
             export DATABASE_URL=${databaseUrl}
             export FLASK_APP=./${flaskApp}
+            export FLASK_DEBUG=1
           '';
         };
       }
