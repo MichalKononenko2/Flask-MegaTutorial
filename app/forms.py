@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo
 from wtforms.validators import ValidationError
 import sqlalchemy as sa
@@ -25,4 +26,9 @@ class RegistrationForm(FlaskForm):
             raise ValidationError(
                 'The username %s is already taken. Please use a different name' % username
             )
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=280)])
+    submit = SubmitField('Submit')
 
