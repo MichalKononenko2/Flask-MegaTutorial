@@ -7,6 +7,13 @@ from app import db, login
 from flask_login import UserMixin
 from hashlib import md5
 
+followers = sa.Table(
+    'followers',
+    db.metadata,
+    sa.Column('follower', sa.String(64), sa.ForeignKey('user.username'), primary_key=True),
+    sa.Column('followed', sa.String(64), sa.ForeignKey('user.username'), primary_key=True)
+)
+
 class User(UserMixin, db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.String(64), primary_key=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
@@ -17,6 +24,16 @@ class User(UserMixin, db.Model):
     about_me: so.Mapped[Optional[str]] = so.mapped_column(sa.String(280))
     last_seen: so.Mapped[Optional[datetime]] = so.mapped_column(
         default=lambda: datetime.now(timezone.utc)
+    )
+    following: so.WriteOnlyMapped['User'] = so.relationship(
+        secondary=followers, primaryjoin=(followers.c.follower == username),
+        secondaryjoin=(followers.c.followed == username),
+        back_populates='followers'
+    )
+    followers: so.WriteOnlyMapped['User'] = so.relationship(
+        secondary=followers, primaryjoin=(followers.c.followed == username),
+        secondaryjoin=(followers.c.follower == username),
+        back_populates='following'
     )
 
     def set_password(self, password: str):
