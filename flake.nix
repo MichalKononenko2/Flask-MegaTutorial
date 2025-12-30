@@ -15,6 +15,8 @@
           p.flask-sqlalchemy
           p.flask-migrate
           p.flask-login
+          p.flask-mail
+          p.pyjwt
           p.email-validator
         ]);
         flaskApp = "microblog.py";
