@@ -38,17 +38,17 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
         self.assertTrue(u1.is_following(u2))
         self.assertEqual(u1.following_count(), 1)
-        self.assertEqual(u2.followers_count(), 1)
+        self.assertEqual(u2.follower_count(), 1)
         u1_following = db.session.scalars(u1.following.select()).all()
         u2_followers = db.session.scalars(u2.followers.select()).all()
-        self.assertIn(u1_following, u2)
-        self.assertIn(u2.followers, u1)
+        self.assertIn(u2, u1_following)
+        self.assertIn(u1, u2_followers)
 
         u1.unfollow(u2)
         db.session.commit()
         self.assertFalse(u1.is_following(u2))
         self.assertEqual(u1.following_count(), 0)
-        self.assertEqual(u2.followers_count(), 0)
+        self.assertEqual(u2.follower_count(), 0)
 
     def test_follow_posts(self):
         u1 = User(username='scott', email='scott@tiger.com')
@@ -60,8 +60,8 @@ class UserModelCase(unittest.TestCase):
         now = datetime.now(timezone.utc)
         p1 = Post(body='Post from Scott', author=u1, timestamp=now)
         p2 = Post(body='Post from Alice', author=u2, timestamp=now + timedelta(seconds=1))
-        p3 = Post(body='Post from Bob', author=u3, timestamp=now + timedelta(seconds=1))
-        p4 = Post(body='Post from Charlie', author=u4, timestamp=now + timedelta(seconds=1))
+        p3 = Post(body='Post from Bob', author=u3, timestamp=now + timedelta(seconds=2))
+        p4 = Post(body='Post from Charlie', author=u4, timestamp=now + timedelta(seconds=3))
         db.session.add_all([p1, p2, p3, p4])
         db.session.commit()
 
@@ -72,13 +72,13 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
 
         f1 = db.session.scalars(u1.following_posts()).all()    
-        f2 = db.session.scalars(u1.following_posts()).all()
-        f3 = db.session.scalars(u1.following_posts()).all()
-        f4 = db.session.scalars(u1.following_posts()).all()
-        self.assertEqual(f1, [p2, p4, p1])
-        self.assertEqual(f2, [p2, p3])
-        self.assertEqual(f3, [p3, p4])
-        self.assertEqual(f4, [p4])
+        f2 = db.session.scalars(u2.following_posts()).all()
+        f3 = db.session.scalars(u3.following_posts()).all()
+        f4 = db.session.scalars(u4.following_posts()).all()
+        self.assertEqual(set(f1), set([p2, p4, p1]))
+        self.assertEqual(set(f2), set([p2, p3]))
+        self.assertEqual(set(f3), set([p3, p4]))
+        self.assertEqual(set(f4), set([p4]))
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

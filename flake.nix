@@ -26,6 +26,9 @@
           version = "0.0.1";
           src = ./.;
           buildInputs = [ python-env ];
+          buildPhase = ''
+            python tests.py
+          '';
           installPhase = ''
             mkdir -p $out/bin
             cp -R app $out/app

@@ -46,16 +46,16 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
 
-    def follow(self, user: User):
+    def follow(self, user: 'User'):
         if not self.is_following(user):
             self.following.add(user)
 
-    def unfollow(self, user: User):
+    def unfollow(self, user: 'User'):
         if self.is_following(user):
             self.following.remove(user)
 
-    def is_following(self, user: User) -> bool:
-        query = self.following.select().where(User.id == user.id)
+    def is_following(self, user: 'User') -> bool:
+        query = self.following.select().where(User.username == user.username)
         return db.session.scalar(query) is not None
 
     def follower_count(self) -> int:
@@ -73,20 +73,26 @@ class User(UserMixin, db.Model):
     def following_posts(self):
         Author = so.aliased(User)
         Follower = so.aliased(User)
-        return sa.select(Post)
-            .join(Post.author.of_type(Author))
-            .join(Author.followers.of_type(Follower), isouter=True)
-            .where(
-              sa.or_(
-                Follower.id == self.id,
-                Author.id == self.id
-              )
-            )
-            .group_by(Post).
-            .order_by(Post.timestamp.desc())
+        return sa.select(Post).\
+            join(Post.author.of_type(Author)).\
+            join(Author.followers.of_type(Follower), isouter=True).\
+            where(
+                sa.or_(
+                Follower.username == self.username,
+                Author.username == self.username
+                )
+            ).\
+            group_by(Post).\
+            order_by(Post.timestamp.desc())
+
+    def __eq__(self, other: 'User') -> bool:
+        return hash(self) == hash(other)
+
+    def __hash__(self) -> int:
+        return hash(self.username)
 
     def __repr__(self) -> str:
-        return '{0}(id={1},username={2})'.format(
+        return '{0}(username={1})'.format(
             self.__class__.__name__, 
             self.username
         )
@@ -100,15 +106,21 @@ class Post(db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.ForeignKey(User.username), index=True)
     author : so.Mapped[User] = so.relationship(back_populates='posts')
 
+    def __eq__(self, other: 'Post') -> bool:
+        return hash(self) == hash(other)
+
+    def __hash__(self) -> int:
+        return hash(self.id)
+
     def __repr__(self) -> str:
-        return '{0}(id={1},timestamp={2},user_id={3})'.format(
+        return '{0}(id={1},user={2},timestamp={3})'.format(
             self.__class__.__name__,
             self.id,
-            self.timestamp.isoformat(),
-            self.user_id
+            self.username,
+            self.timestamp.isoformat()
         )
 
 @login.user_loader
-def load_user(id: str) -> Optional[User]:
-    return db.session.get(User, int(id))
+def load_user(username: str) -> Optional[User]:
+    return db.session.get(User, username)
 
