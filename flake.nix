@@ -19,6 +19,7 @@
           p.pyjwt
           p.email-validator
           p.pytest
+          p.hypothesis
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
@@ -29,9 +30,7 @@
           version = "0.0.1";
           src = ./.;
           buildInputs = [ python-env ];
-          buildPhase = ''
-            py.test tests.py
-          '';
+          buildPhase = ''py.test'';
           installPhase = ''
             mkdir -p $out/bin
             cp -R app $out/app
