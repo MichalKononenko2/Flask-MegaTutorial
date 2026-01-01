@@ -9,6 +9,27 @@
       system: 
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        flask-moment = pkgs.python3Packages.buildPythonPackage rec {
+          pname = "flask-moment";
+          version = "v1.0.6";
+          pyproject = true;
+
+          src = pkgs.fetchFromGitHub {
+            owner = "miguelgrinberg";
+            repo = "Flask-Moment";
+            tag = version;
+            hash = "sha256-sqpU3ki32+7dC4RM06tOF9Cu/vSqvq9qy92pcNedKDg=";
+          };
+
+          build-system = [ pkgs.python3Packages.flit-core ];
+
+          meta = {
+            description = "Flask extension providing moment-js";
+            homepage = "https://github.com/miguelgrinberg/Flask-Moment/tree/v1.0.6";
+            changelog = "https://github.com/miguelgrinberg/Flask-Moment/blob/v1.0.6/CHANGES.md";
+            license = pkgs.lib.licenses.mit;
+          };
+        };
         python-env = pkgs.python3.withPackages(p: [ 
           p.flask 
           p.flask-wtf 
@@ -16,11 +37,11 @@
           p.flask-migrate
           p.flask-login
           p.flask-mail
-          p.flask-moment
           p.pyjwt
           p.email-validator
           p.pytest
           p.hypothesis
+          flask-moment
         ]);
         flaskApp = "microblog.py";
         topLevelFiles = [ flaskApp "config.py" ];
