@@ -20,3 +20,7 @@ def test_index(client):
 def test_login(client):
     assert client.get('/login').status_code == 200
 
+def test_static(client):
+    assert client.get('/static/bootstrap.bundle.min.js').status_code == 200
+    assert client.get('/static/bootstrap.min.css').status_code == 200
+

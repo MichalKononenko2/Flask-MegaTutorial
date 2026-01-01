@@ -18,6 +18,19 @@ def before_request():
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
+@app.route('/static/<filename>')
+def serve_static(filename: str):
+    if filename in ['.', '..']:
+        return render_template('404.html'), 404
+    with open(
+        os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), 
+            'static', 
+            filename
+        ), 'r') as f:
+        return f.read(), 200
+
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
