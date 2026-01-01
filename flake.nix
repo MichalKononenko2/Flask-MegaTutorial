@@ -21,7 +21,11 @@
             hash = "sha256-sqpU3ki32+7dC4RM06tOF9Cu/vSqvq9qy92pcNedKDg=";
           };
 
-          build-system = [ pkgs.python3Packages.flit-core ];
+          build-system = with pkgs.python3Packages; [ 
+            flask
+            setuptools 
+            setuptools-scm 
+          ];
 
           meta = {
             description = "Flask extension providing moment-js";
