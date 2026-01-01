@@ -16,6 +16,7 @@
           p.flask-migrate
           p.flask-login
           p.flask-mail
+          p.flask-moment
           p.pyjwt
           p.email-validator
           p.pytest
