@@ -46,6 +46,7 @@
           p.email-validator
           p.pytest
           p.hypothesis
+          p.langdetect
           flask-moment
         ]);
         flaskApp = "microblog.py";
