@@ -120,6 +120,7 @@ class Post(db.Model):
     )
     username: so.Mapped[str] = so.mapped_column(sa.ForeignKey(User.username), index=True)
     author : so.Mapped[User] = so.relationship(back_populates='posts')
+    language: so.Mapped[Optional[str]] = so.mapped_column(sa.String(5))
 
     def __eq__(self, other: 'Post') -> bool:
         return hash(self) == hash(other)

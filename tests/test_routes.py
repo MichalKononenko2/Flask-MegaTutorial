@@ -24,3 +24,6 @@ def test_static(client):
     assert client.get('/static/bootstrap.bundle.min.js').status_code == 200
     assert client.get('/static/bootstrap.min.css').status_code == 200
 
+def test_register(client):
+    assert client.get('/register').status_code == 200
+
