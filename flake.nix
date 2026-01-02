@@ -41,6 +41,7 @@
           p.flask-migrate
           p.flask-login
           p.flask-mail
+          p.flask-babel
           p.pyjwt
           p.email-validator
           p.pytest
